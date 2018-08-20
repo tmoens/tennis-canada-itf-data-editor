@@ -1,0 +1,35 @@
+@mixin itf-player-list-theme($theme) {
+
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+  $accent: map-get($theme, accent);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .player-list {
+    list-style: none;
+    padding: 9px;
+    margin-right: 12px;
+  }
+
+  .player-list-item {
+    &:hover, &:active, &:focus {
+      background-color: mat-color($background, hover);
+    }
+
+    &.selected {
+      background-color: mat-color($primary, lighter, 0.5);
+    }
+
+  }
+  .candidate {
+    background-color: mat-color($accent,  0.5);
+    padding: 7px;
+  }
+
+  .instruction {
+    background-color: mat-color($accent, darker, 0.5);
+
+  }
+}
+
