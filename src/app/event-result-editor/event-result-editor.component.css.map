@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gBAAiB;EACf,IAAI,EAAE,MAAM;;AAEd,kBAAmB;EACjB,IAAI,EAAE,MAAM;;AAEd,0BAA2B;EACzB,IAAI,EAAE,MAAM;;AAEd,qBAAsB;EACpB,IAAI,EAAE,MAAM",
+"sources": ["event-result-editor.component.scss"],
+"names": [],
+"file": "event-result-editor.component.css"
+}

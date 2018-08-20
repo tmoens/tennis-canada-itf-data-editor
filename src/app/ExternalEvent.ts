@@ -1,10 +1,14 @@
-import {ExternalTournamentRating} from './ExternalTournamentRating';
-export class ExternalTournament {
+export class ExternalEvent {
+  eventId: string;
   tournamentId: string;
   name: string;
-  sanctioningBody: string;
-  category: string;
-  subCategory: string;
-  startDate: string;
-  endDate: string;
+  gender: string;
+  eventType: string;
+  discipline: string;
+  drawSize:number;
+  ratingId: number;
+  rating: number;
+  manuallyCreated: boolean;
+  ignoreResults: boolean;
+  numResults: number;
 }

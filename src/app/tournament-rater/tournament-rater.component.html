@@ -1,0 +1,113 @@
+<div fxLayout="row wrap" fxLayoutGap="10px" style="margin: 5px">
+  <div fxFlex="20%">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><h3 class="mat-title">Rate Tournaments</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="mat-body-1">
+          We automatically download ATP, WTA and ITF tournament data from the ITF.
+          Sometimes there is insufficient information to correctly
+          categorize every tournament for use in Tennis Canada rankings.
+        </p>
+      </mat-card-content>
+      <mat-card-content>
+        <p class="mat-body-1">
+          This Application lets you complete the job of categorizing these tournaments.
+        </p>
+      </mat-card-content>
+      <mat-card-header><h3>List Filters</h3></mat-card-header>
+      <div fxLayout="column end" >
+        <mat-card-content>
+          <mat-slide-toggle color="primary" [(ngModel)]="filter.uncategorizedOnly">
+            Uncategorized Tournaments Only
+          </mat-slide-toggle>
+        </mat-card-content>
+        <mat-form-field>
+          <input matInput [(ngModel)]="filter.tournamentName" name="tournamentName"
+                 placeholder="Tournament Name" type="search">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Sanctioning Body"
+                      class="form-control"
+                      [(ngModel)]="selectedSanctioningBody" name="sanctioningBody">
+            <mat-option *ngFor="let item of sanctioningBodies" [value]="item">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startdp" placeholder="From Date" [formControl]="startFilterPeriodFC"
+                 (dateChange)="onStartDateChanged()" (dateInput)="onStartDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="startdp"></mat-datepicker-toggle>
+          <mat-datepicker #startdp></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="enddp" placeholder="Until date" [formControl]="endFilterPeriodFC"
+                 (dateChange)="onEndDateChanged()" (dateInput)="onEndDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="enddp"></mat-datepicker-toggle>
+          <mat-datepicker #enddp></mat-datepicker>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="search()">Search</button>
+      </div>
+    </mat-card>
+  </div>
+  <div fxFlex>
+    <mat-card>
+      <mat-spinner *ngIf="loadingTournaments"></mat-spinner>
+      <div *ngIf="!loadingTournaments && tournaments.length == 0">
+        <h3 class="mat-title">No tournaments match the filter criteria.</h3>
+      </div>
+      <div *ngIf="!loadingTournaments && tournaments.length > 0" >
+        <mat-table #unratedTournamentsTable [dataSource]="ut">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let t"><a mat-button color="primary" [href]="makeURL(t)" target="_blank" >{{ t.name }}</a></mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="ed">
+            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+            <mat-cell *matCellDef="let t">{{ t.endDate.substr(0,10) }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="hn">
+            <mat-header-cell *matHeaderCellDef>Country</mat-header-cell>
+            <mat-cell *matCellDef="let t">{{ t.hostNation }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="sb">
+            <mat-header-cell *matHeaderCellDef>Org</mat-header-cell>
+            <mat-cell *matCellDef="let t">{{ t.sanctioningBody }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+            <mat-cell *matCellDef="let t">{{ t.category }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="subCategory">
+            <mat-header-cell *matHeaderCellDef>Sub-Category</mat-header-cell>
+            <mat-cell *matCellDef="let t">
+              <div *ngIf="t.subCategoryEditable">
+                <mat-form-field >
+                  <mat-select [(ngModel)]="t.subCategory" (change)="onCategorize(t)">
+                    <mat-option *ngFor="let item of supportedSubCategories[t.tournamentId]" [value]="item">{{ item }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div *ngIf="!t.subCategoryEditable">
+                {{ t.subCategory }}
+              </div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="updated">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let t">
+              <div *ngIf="t.subCategoryEditable">
+                <mat-icon *ngIf="t.subCategory != null" color="primary">done</mat-icon>
+                <mat-icon *ngIf="t.subCategory == null">navigate_before</mat-icon>
+              </div>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+          <mat-row *matRowDef="let row;  columns:displayColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </mat-card>
+  </div>
+</div>

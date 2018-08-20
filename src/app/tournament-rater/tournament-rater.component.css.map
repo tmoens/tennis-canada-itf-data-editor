@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gBAAiB;EACf,IAAI,EAAE,OAAO;;AAEf,cAAe;EACb,IAAI,EAAE,MAAM;;AAEd,cAAe;EACb,IAAI,EAAE,MAAM;;AAEd,mBAAoB;EAClB,IAAI,EAAE,MAAM;;AAEd,UAAW;EACT,QAAQ,EAAE,IAAI;EACd,UAAU,EAAE,KAAK",
+"sources": ["tournament-rater.component.scss"],
+"names": [],
+"file": "tournament-rater.component.css"
+}

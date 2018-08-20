@@ -1,0 +1,124 @@
+<div fxLayout="row wrap" fxLayoutGap="5px" style="margin: 5px">
+  <div fxFlex="39%" >
+    <mat-card>
+      <mat-toolbar>
+        <button mat-icon-button color="primary" (click)="onNewTournament()" matTooltip="Add a new tournament">
+          <mat-icon aria-label="New Tournament">add_circle_outline</mat-icon>
+        </button>
+        <span>Tournament List</span>
+        <span class="fill-remaining-space"></span>
+        <mat-form-field style="font-size: 12px">
+          <input matInput [(ngModel)]="filterString" placeholder="Filter the List" type="search"
+                 (keyup)="onFilterChange()" (search)="onFilterChange()" >
+        </mat-form-field>
+      </mat-toolbar>
+      <mat-card class="instruction" *ngIf="tournamentCount == 0">
+        <mat-card-header><h3>No tournaments match the Tournament Filter</h3></mat-card-header>
+        <mat-card-content>Please adjust the filter.</mat-card-content>
+      </mat-card>
+      <div *ngIf="tournamentCount > 0">
+        <mat-spinner *ngIf="tournamentsLoading"></mat-spinner>
+        <mat-card-content style="height: 600px; overflow-y: auto">
+          <mat-list class="tournament-list" >
+            <mat-list-item *ngIf="newTournament" class="tournament-list-item selected">
+              New Tournament
+            </mat-list-item>
+            <div *ngFor="let tournament of tournaments$ | async">
+              <mat-list-item *ngIf="!selectedTournament || tournament.tournamentId != selectedTournament.tournamentId"
+                             class="tournament-list-item"
+                             (click)="onUserSelectTournament(tournament)">
+                <span  mat-line>
+
+                  <span *ngIf="tournament.numEvents > 0">
+                    <mat-icon aria-label="Locked"  color="primary">chevron_right</mat-icon>
+                  </span>
+                  <span *ngIf="tournament.numEvents == 0 || tournament.numEvents == null">
+                    <mat-icon>remove</mat-icon>
+                  </span>
+                  {{tournament.endDate.substr(0,10)}} {{tournament.name}}
+                </span>
+              </mat-list-item>
+              <div *ngIf="selectedTournament && tournament.tournamentId == selectedTournament.tournamentId">
+                <mat-list-item
+                  class="tournament-list-item selected"
+                  (click)="onUserSelectTournament(tournament)">
+                <span  mat-line>
+                  <span *ngIf="tournament.numEvents > 0">
+                    <mat-icon aria-label="Locked" color="primary">expand_more</mat-icon>
+                  </span>
+                  <button *ngIf="!tournament.manuallyCreated || tournament.numEvents > 0"
+                          mat-icon-button color="primary" disabled>
+                    <mat-icon aria-label="Locked">locked</mat-icon>
+                  </button>
+                  <button *ngIf="tournament.manuallyCreated && (tournament.numEvents == 0 || tournament.numEvents == null)"
+                          mat-icon-button color="primary"
+                          (click)="onDeleteTournament(tournament.tournamentId)"
+                          matTooltip="Delete the tournament">
+                    <mat-icon aria-label="Delete">delete</mat-icon>
+                  </button>
+                  <button *ngIf="tournament.manuallyCreated"
+                          mat-icon-button color="primary"
+                          (click)="onNewEvent($event)"
+                          matTooltip="Add a new event">
+                    <mat-icon aria-label="New Tournament">add_circle_outline</mat-icon>
+                  </button>
+                  {{tournament.endDate.substr(0,10)}} {{tournament.name}}
+                </span>
+                </mat-list-item>
+                <mat-spinner *ngIf="eventsLoading"></mat-spinner>
+                <mat-list dense class="event-list">
+                  <mat-list-item *ngIf="newEvent" class="tournament-list-item selected">
+                    New Event
+                  </mat-list-item>
+                  <mat-list-item *ngFor="let event of events$ | async"
+                                 class="tournament-list-item"
+                                 [class.selected]="selectedEvent && event.eventId == selectedEvent.eventId"
+                                 (click)="onUserSelectEvent(event)">
+                  <span mat-line>
+                    <span *ngIf="selectedEvent && event.eventId == selectedEvent.eventId" >
+                      <button *ngIf="!event.manuallyCreated || event.numResults > 0"
+                              mat-icon-button color="primary" disabled>
+                        <mat-icon aria-label="Locked">locked</mat-icon>
+                      </button>
+                      <button *ngIf="event.manuallyCreated && (event.numResults == 0 || event.numResults == null)" mat-icon-button color="primary"
+                              (click)="onDeleteEvent(event.eventId)">
+                        <mat-icon aria-label="Delete">delete</mat-icon>
+                      </button>
+                    </span>
+                      {{event.gender}}-{{event.eventType}}-{{event.discipline.substr(0,1)}} {{ event.name }}
+                  </span>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+          </mat-list>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  </div>
+  <div fxFlex>
+    <div fxLayout="column wrap" fxLayoutGap="5px" style="margin: 5px">
+      <mat-card class="instruction" *ngIf="!selectedTournament">
+        <mat-card-header><h3>Select a tournament</h3></mat-card-header>
+      </mat-card>
+      <div fxFlex *ngIf="selectedTournament  && !selectedEvent">
+        <app-tournament-detail-editor
+          [tournament]="selectedTournament"
+          (change)="onTournamentUpdated($event)">
+        </app-tournament-detail-editor>
+      </div>
+      <div fxFlex *ngIf="selectedEvent">
+        <app-event-detail-editor
+          [tournament]="selectedTournament"
+          [event]="selectedEvent"
+          (change)="onEventUpdated($event)">
+        </app-event-detail-editor>
+      </div>
+      <div fxFlex *ngIf="selectedEvent && selectedEvent.eventId">
+        <app-event-result-editor
+          [event]="selectedEvent">
+        </app-event-result-editor>
+      </div>
+    </div>
+  </div>
+</div>

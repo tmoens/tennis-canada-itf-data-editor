@@ -1,0 +1,134 @@
+<div fxLayout="row wrap" fxLayoutGap="10px" style="margin: 5px">
+  <div fxFlex="17">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><h3>International Results</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>This application allows you to browse results for Canadians
+          playing in ATP, WTA and ITF.</p>
+      </mat-card-content>
+      <mat-card-header>
+        <mat-card-title><h3>Result Filters</h3></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field>
+          <input matInput [(ngModel)]="filter.playerId" name="ITFId"
+                 placeholder="Full ITF Id" type="search">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="filter.VRID" name="VRId"
+                 placeholder="Full VR Id" type="search">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="filter.familyName" name="familyName"
+                 placeholder="Family Name" type="search">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="filter.tournamentName" name="tournamentName"
+                 placeholder="Tournament Name" type="search">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Sanctioning Body"
+                      class="form-control"
+                      [(ngModel)]="selectedSanctioningBody" name="sanctioningBody">
+            <mat-option *ngFor="let item of sanctioningBodies" [value]="item">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startdp" placeholder="From Date" [formControl]="startFilterPeriodFC"
+                 (dateChange)="onStartDateChanged()" (dateInput)="onStartDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="startdp"></mat-datepicker-toggle>
+          <mat-datepicker #startdp></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="enddp" placeholder="Until date" [formControl]="endFilterPeriodFC"
+                 (dateChange)="onEndDateChanged()" (dateInput)="onEndDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="enddp"></mat-datepicker-toggle>
+          <mat-datepicker #enddp></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Sort Order"
+                      class="form-control"
+                      [(ngModel)]="selectedSortOrder" name="sortOrder">
+            <mat-option *ngFor="let item of sortOrders" [value]="item">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button color="primary" (click)="search()">Search</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex>
+    <mat-card *ngIf="loadingResults">
+      <mat-spinner >Loading Results</mat-spinner>
+    </mat-card>
+    <mat-card class="instruction" *ngIf="resultCount == 0  && !loadingResults">
+      <mat-card-header>No results match the filter. Try relaxing the criteria.</mat-card-header>
+    </mat-card>
+    <mat-card class="instruction" *ngIf="resultCount == -1  && !loadingResults">
+      <mat-card-header>Fill in the appropriate filter criteria and hit "search"</mat-card-header>
+    </mat-card>
+    <mat-card *ngIf="resultCount > 0 && !loadingResults" >
+      <mat-table #resultsTable [dataSource]="results">
+        <ng-container matColumnDef="startDate">
+          <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{ t.startDate }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="promoName">
+          <mat-header-cell *matHeaderCellDef>Tournament</mat-header-cell>
+          <mat-cell *matCellDef="let t">
+            <button mat-button color="primary" (click)="onTournamentNameSelected(t.promoName)">{{ t.promoName }}</button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="tournamentType">
+          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{ t.sanctioningBody }}/{{ t.category }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fullName">
+          <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{t.fullName}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+          <mat-cell *matCellDef="let t">
+            <button mat-button color="primary" (click)="onPlayerIDSelected(t.playerId)">{{ t.playerId }}</button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="vrid">
+          <mat-header-cell *matHeaderCellDef>VR Id</mat-header-cell>
+          <mat-cell *matCellDef="let t">
+            <button mat-button color="primary" (click)="onVRIDSelected(t.VRID)">{{ t.VRID }}</button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fp">
+          <mat-header-cell *matHeaderCellDef>Result</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{ t.finishPosition }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="drawSize">
+          <mat-header-cell *matHeaderCellDef>DrawSize</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{ t.drawSize }}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="eventType">
+          <mat-header-cell *matHeaderCellDef>Event</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{t.eventDescription}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="jrPts">
+          <mat-header-cell *matHeaderCellDef>Jr Pts</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{t.tcJrPoints}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="sbPts">
+          <mat-header-cell *matHeaderCellDef>SB Pts</mat-header-cell>
+          <mat-cell *matCellDef="let t">{{t.externalRankingPoints}}</mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+        <mat-row *matRowDef="let row;  columns:displayColumns;"></mat-row>
+      </mat-table>
+
+    </mat-card>
+  </div>
+</div>

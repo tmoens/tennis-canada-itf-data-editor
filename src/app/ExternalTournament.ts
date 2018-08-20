@@ -1,15 +1,15 @@
-import {ITFTournamentRating} from './ITFTournamentRating';
-export class ITFTournament {
-  Tournamentid: string;
-  Promoname: string;
-  Tournamentname: string;
-  Zone: string;
-  Hostnation: string;
-  Category: string;
-  Startdate: string;
-  Enddate: string;
-  Surfacecategory: string;
-  Inoutdoor: string;
-  Disciplinecode: string;
-  TournamentRating: ITFTournamentRating;
+export class ExternalTournament {
+  tournamentId: string;
+  name: string;
+  promoName: string;
+  zone: string;
+  hostNation: string;
+  sanctioningBody: string;
+  category: string;
+  subCategory: string;
+  startDate: string;
+  endDate: string;
+  manuallyCreated: boolean;
+  numEvents: number;
+  subCategoryEditable:boolean;
 }

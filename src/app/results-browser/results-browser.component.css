@@ -1,0 +1,35 @@
+.mat-column-startDate {
+  flex: 0 0 7%; }
+
+.mat-column-tournamentType {
+  flex: 0 0 8%; }
+
+.mat-column-eventType {
+  flex: 0 0 10%; }
+
+.mat-column-fullName {
+  flex: 0 0 16%; }
+
+.mat-column-id {
+  flex: 0 0 9%; }
+
+.mat-column-vrid {
+  flex: 0 0 8%; }
+
+.mat-column-fp {
+  flex: 0 0 5%; }
+
+.mat-column-jrPts {
+  flex: 0 0 5%; }
+
+.mat-column-sbPts {
+  flex: 0 0 5%; }
+
+.mat-column-drawSize {
+  flex: 0 0 5%; }
+
+.mat-table {
+  overflow: auto;
+  max-height: 655px; }
+
+/*# sourceMappingURL=results-browser.component.css.map */

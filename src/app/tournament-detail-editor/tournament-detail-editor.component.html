@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-toolbar>
+    <span>Tournament Detail</span>
+    <span class="fill-remaining-space"></span>
+    <span>{{t.name}}</span>
+  </mat-toolbar>
+  <mat-card-content>
+    <form #tournamentForm="ngForm">
+      <div fxLayout="row wrap" fxLayoutGap="20px" style="margin: 25px">
+        <mat-form-field fxFlex="40">
+          <input matInput placeholder="Tournament Name"
+                 class="form-control" required [disabled]="disabled"
+                 [(ngModel)]="t.name" name="name">
+        </mat-form-field>
+        <span class="fill-remaining-space"></span>
+        <div fxFlex="50"></div>
+        <mat-form-field fxFlex="30">
+          <input matInput [matDatepicker]="startDatePicker" placeholder="End Date"
+                 [formControl]="startFC" required [disabled]="disabled"
+                 (dateChange)="onStartDateChanged()" (dateInput)="onStartDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <input matInput [matDatepicker]="endDatePicker" placeholder="End Date"
+                 [formControl]="endFC" required [disabled]="disabled"
+                 (dateChange)="onEndDateChanged()" (dateInput)="onEndDateChanged()">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+        <div fxFlex="30"></div>
+        <mat-form-field fxFlex="30">
+          <mat-select placeholder="Sanctioning Body" (change)="onFormChange()"
+                      class="form-control" required [disabled]="disabled"
+                      [(ngModel)]="t.sanctioningBody" name="sanctioningBody">
+            <mat-option *ngFor="let item of supportedSanctioningBodies" [value]="item"
+                        [disabled]="noManualTournaments.indexOf(item) > -1">{{ item }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <mat-select placeholder="Category" (change)="onFormChange()"
+                      class="form-control" required [disabled]="disabled"
+                      [(ngModel)]="t.category" name="category">
+            <mat-option *ngFor="let item of supportedCategories" [value]="item">
+              {{ item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <mat-select placeholder="Sub-Category"
+                      class="form-control" required [disabled]="disabled"
+                      [(ngModel)]="t.subCategory" name="subCategory">
+            <mat-option *ngFor="let item of supportedSubCategories" [value]="item">
+              {{ item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions *ngIf="!disabled">
+    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="end center" style="margin: 5px">
+      <button mat-button color="primary" (click)="onSave()"
+              [disabled]="!tournamentForm.form.valid || !tournament.manuallyCreated">Save Changes</button>
+    </div>
+  </mat-card-actions>
+</mat-card>

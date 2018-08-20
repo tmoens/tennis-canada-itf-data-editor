@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,qBAAsB;EACpB,IAAI,EAAE,MAAM;;AAEd,0BAA2B;EACzB,IAAI,EAAE,MAAM;;AAEd,qBAAsB;EACpB,IAAI,EAAE,OAAO;;AAEf,oBAAqB;EACnB,IAAI,EAAE,OAAO;;AAEf,cAAe;EACb,IAAI,EAAE,MAAM;;AAEd,gBAAiB;EACf,IAAI,EAAE,MAAM;;AAEd,cAAe;EACb,IAAI,EAAE,MAAM;;AAEd,iBAAkB;EAChB,IAAI,EAAE,MAAM;;AAEd,iBAAkB;EAChB,IAAI,EAAE,MAAM;;AAEd,oBAAqB;EACnB,IAAI,EAAE,MAAM;;AAEd,UAAW;EACT,QAAQ,EAAE,IAAI;EACd,UAAU,EAAE,KAAK",
+"sources": ["results-browser.component.scss"],
+"names": [],
+"file": "results-browser.component.css"
+}

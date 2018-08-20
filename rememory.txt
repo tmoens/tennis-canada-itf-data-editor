@@ -1,0 +1,18 @@
+Configuration:
+
+For differences between develoipment and production configuration, look in /environments.
+This is critical for everything to do with Okta - the configuration in the
+environment files parallels the configuration of the application on Okta.
+
+For development:
+
+ng serve --environment=dev
+
+
+Build for production
+
+ng build --base-href=/TCExternalData/ --environment=prod
+
+Build in production mode for local test
+
+ng build --base-href=/TCExternalData/ --environment=localProd

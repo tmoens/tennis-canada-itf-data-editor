@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('untitled2 App', () => {
+describe('itfdata App', () => {
   let page: AppPage;
 
   beforeEach(() => {

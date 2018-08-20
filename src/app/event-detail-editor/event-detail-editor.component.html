@@ -1,0 +1,66 @@
+<mat-card >
+  <mat-toolbar>
+    <span>Event Detail</span>
+    <span class="fill-remaining-space"></span>
+    <span>{{tournament.name}} {{tournament.sanctioningBody}} {{tournament.category}} </span>
+    <span *ngIf="tournament.subCategory != tournament.category"> {{tournament.subCategory}}</span>
+    <span>: {{e.gender}} {{e.eventType}} {{e.discipline}}</span>
+  </mat-toolbar>
+  <mat-card-content >
+    <form #eventForm="ngForm">
+      <div fxLayout="row wrap" fxLayoutGap="20px" style="margin: 25px">
+        <mat-form-field fxFlex="40">
+          <input matInput placeholder="Event Name" class="form-control"
+                 [(ngModel)]="e.name" name="name" required>
+        </mat-form-field>
+        <mat-slide-toggle fxFlex="30" [(ngModel)]="e.ignoreResults"
+                          [disabled]="!e.manuallyCreated"
+                          name="ignoreResults"
+                          matTooltip="Turn on for qualifying, exhibition or other non ranked events."
+                          color="primary" >
+          Ignore results for rankings
+        </mat-slide-toggle>
+        <span class="fill-remaining-space"></span>
+        <mat-form-field fxFlex="10">
+          <input matInput placeholder="Rating" class="form-control" disabled
+                 [(ngModel)]="e.rating" name="rating">
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+          <mat-select placeholder="Gender" class="form-control"
+                      [disabled]="!e.manuallyCreated"
+                      [(ngModel)]="e.gender" name="gender" (change)="onFormChange()" required>
+            <mat-option *ngFor="let item of supportedGenders" [value]="item" >{{ item }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+          <mat-select  placeholder="EventType" class="form-control"
+                       [disabled]="!e.manuallyCreated"
+                       [(ngModel)]="e.eventType" name="eventType" (change)="onFormChange()" required>
+            <mat-option *ngFor="let item of supportedEventTypes" [value]="item" >{{ item }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+          <mat-select placeholder="Discipline" class="form-control" required
+                      [disabled]="!e.manuallyCreated"
+                      [(ngModel)]="e.discipline" name="discipline">
+            <mat-option value="Singles" >Singles</mat-option>
+            <mat-option value="Doubles" >Doubles</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+          <input matInput placeholder="Draw Size" class="form-control" type="number"
+                 [disabled]="!e.manuallyCreated"
+                 [(ngModel)]="e.drawSize" name="drawSize" required>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions *ngIf="e.manuallyCreated" >
+    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="end center" style="margin: 5px">
+      <button mat-button color="primary"  (click)="onSave()"
+              [disabled]="!eventForm.form.valid || !event.manuallyCreated">
+        Save Changes
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

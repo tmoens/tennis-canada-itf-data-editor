@@ -1,0 +1,107 @@
+<mat-card >
+  <mat-toolbar>
+    <button mat-icon-button color="primary" (click)="onNewER()" matTooltip="Add result for this event">
+      <mat-icon aria-label="New Tournament">add_circle_outline</mat-icon>
+    </button>
+    <span>Event Results</span>
+  </mat-toolbar>
+  <mat-card-content >
+    <mat-spinner *ngIf="loadingResults"></mat-spinner>
+    <mat-table #eventResultsTable [dataSource]="resultsTD" *ngIf="!loadingResults && numResults > 0">
+      <ng-container matColumnDef="edit">
+        <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
+        <mat-cell *matCellDef="let er">
+          <button *ngIf="event.manuallyCreated"
+                  mat-icon-button color="primary"
+                  (click)="onEdit(er)">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+          <button *ngIf="!event.manuallyCreated"
+                  mat-icon-button color="primary" disabled>
+            <mat-icon aria-label="Delete">locked</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="delete">
+        <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+        <mat-cell *matCellDef="let er">
+          <button *ngIf="event.manuallyCreated"
+                  mat-icon-button color="primary"
+                  (click)="onDelete(er)">
+            <mat-icon aria-label="Delete">delete</mat-icon>
+          </button>
+          <button *ngIf="!event.manuallyCreated"
+                  mat-icon-button color="primary" disabled>
+            <mat-icon aria-label="Delete">locked</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="playerId">
+        <mat-header-cell *matHeaderCellDef >PlayerId</mat-header-cell>
+        <mat-cell *matCellDef="let er">{{ er.playerId }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="givenName">
+        <mat-header-cell *matHeaderCellDef >Given Name</mat-header-cell>
+        <mat-cell *matCellDef="let er">{{ er.givenName }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="familyName">
+        <mat-header-cell *matHeaderCellDef>Family Name</mat-header-cell>
+        <mat-cell *matCellDef="let er">{{ er.familyName }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="finishPosition">
+        <mat-header-cell *matHeaderCellDef>Place</mat-header-cell>
+        <mat-cell *matCellDef="let er">{{ er.finishPosition }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="TCPoints">
+        <mat-header-cell *matHeaderCellDef>TC Jr Points</mat-header-cell>
+        <mat-cell *matCellDef="let er">{{ er.tcPoints }}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+      <mat-row *matRowDef="let row;  columns:displayColumns;"></mat-row>
+    </mat-table>
+    <form #eventResultForm="ngForm" *ngIf="!loadingResults && selectedER != null">
+      <div fxLayout="row wrap" fxLayoutGap="20px" style="margin: 25px">
+        <mat-form-field fxFlex="15">
+          <input matInput placeholder="VRId"
+                 class="form-control" required
+                 [disabled]="selectedER.playerId != ''"
+                 [(ngModel)]="selectedER.vrid" name="vrid"
+                 maxlength="8"
+                 pattern="\d{8}"
+                 placeholder="Enter Player's VRID"
+                 (change)="onVRIDChange()">
+        </mat-form-field>
+        <mat-form-field fxFlex="10">
+          <input matInput placeholder="finishPosition"
+                 class="form-control" required
+                 [(ngModel)]="selectedER.finishPosition" name="finishPosition"
+                 (change)="onFinishPositionChange" (keyup)="onFinishPositionChange()">
+        </mat-form-field>
+        <mat-form-field fxFlex="16">
+          <input matInput placeholder="Given Name"
+                 class="form-control" required disabled
+                 [(ngModel)]="selectedER.givenName" name="givenName">
+        </mat-form-field>
+        <mat-form-field fxFlex="16">
+          <input matInput placeholder="Family Name"
+                 class="form-control" required disabled
+                 [(ngModel)]="selectedER.familyName" name="familyName">
+        </mat-form-field>
+        <mat-form-field fxFlex="8">
+          <input matInput placeholder="TC Points"
+                 class="form-control" required disabled
+                 [(ngModel)]="selectedER.tcPoints" name="points">
+        </mat-form-field>
+        <button mat-button color="primary" (click)="onCancel()" fxFlex="10">
+          Cancel
+        </button>
+        <button mat-button color="primary" (click)="onSave()" fxFlex
+                [disabled]="!eventResultForm.form.valid">
+          Save
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions *ngIf="event.manuallyCreated" >
+  </mat-card-actions>
+</mat-card>

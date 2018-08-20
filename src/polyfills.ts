@@ -49,6 +49,10 @@ import 'core-js/es7/reflect';
 // import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 
 
+// Temporary solution for OKTA sign-in widget breaking Angular app
+// Added by Ted 2017-11-02 citing documentation here:
+// https://developer.okta.com/code/angular/okta_angular_sign-in_widget
+import '@okta/okta-signin-widget/dist/js/okta-sign-in.min.js';
 
 /***************************************************************************************************
  * Zone JS is required by Angular itself.

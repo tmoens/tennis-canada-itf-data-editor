@@ -1,11 +1,16 @@
-@import './node';
+@import '../../node_modules/@angular/material/theming';
+@import "./app.component";
+@import "external-player-manager/external-player-manager.component";
 
-@include mat-core();
 
-$custom-theme-primary: mat-palette($mat-light-blue);
-$custom-theme-accent: mat-palette($mat-orange, A200, A100, A400);
-$custom-theme-warn: mat-palette($mat-red);
+$tc-tools-primary: mat-palette($mat-purple);
+$tc-tools-accent: mat-palette($mat-yellow, A200, A100, A400);
+$tc-tools-warn: mat-palette($mat-red);
 
-$custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+$tc-tools: mat-light-theme($tc-tools-primary, $tc-tools-accent, $tc-tools-warn);
 
-@include angular-material-theme($custom-theme);
+.fill-remaining-space {
+  // This fills the remaining space, by using flexbox.
+  // Every toolbar row uses a flexbox row layout.
+  flex: 1 1 auto;
+}
