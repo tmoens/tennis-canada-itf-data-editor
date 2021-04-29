@@ -1,13 +1,12 @@
 Configuration:
 
-For differences between develoipment and production configuration, look in /environments.
+For differences between development and production configuration, look in /environments.
 This is critical for everything to do with Okta - the configuration in the
 environment files parallels the configuration of the application on Okta.
 
 For development:
 
 ng serve --environment=dev
-
 
 Build for production
 

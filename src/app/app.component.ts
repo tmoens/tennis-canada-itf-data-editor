@@ -12,16 +12,12 @@ import { RatingService } from './rating-service.service';
 })
 
 export class AppComponent {
-  signIn: OktaAuthService;
-  router: Router;
   title = 'External Results Data Manager';
-  constructor(signIn: OktaAuthService,
-              router: Router,
+  constructor(private signIn: OktaAuthService,
+              private router: Router,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer,
               ratingService: RatingService) {
-    this.signIn = signIn;
-    this.router = router;
 
     // The rating service is used to rate non tennis canada events, it
     // loads data here and never needs to talk to the server again.
